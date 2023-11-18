@@ -54,6 +54,14 @@
 	              	</div>
 				  </div>
 				  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+				    <label for="select_secondary_broadcaster" class="col-sm-3 col-form-label text-left">Select Bat Speed Broadcaster </label>
+				    <div class="col-sm-6 col-md-6">
+				      <select id="select_secondary_broadcaster" name="select_secondary_broadcaster" class="browser-default custom-select custom-select-sm">
+				      	<option value="spektacom">Spektacom</option>
+				      </select>
+				    </div>
+				  </div>
+				  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
 				    <label for="bat_speed_source_file_path" class="col-sm-3 col-form-label text-left">Bat Speed Source Filepath </label>
 				    <div class="col-sm-6 col-md-6">
 						<input type="text" id="bat_speed_source_file_path" name="bat_speed_source_file_path" 

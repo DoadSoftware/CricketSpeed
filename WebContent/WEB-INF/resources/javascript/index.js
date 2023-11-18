@@ -56,8 +56,8 @@ function populateFormObject(whatToProcess) {
 		}
 		break;
 	case 'BAT_SPEED':
-		if(bat_speed_data) {
-			document.getElementById('bat_speed_value').innerHTML = 'Bat Speed: ' + bat_speed_data.batSpeed;
+		if(bat_speed) {
+			document.getElementById('bat_speed_value').innerHTML = 'Bat Speed: ' + bat_speed.batSpeed;
 		} else {
 			document.getElementById('bat_speed_value').innerHTML = 'NO BAT SPEED FOUND';
 		}
@@ -75,6 +75,7 @@ function uploadFormDataToSessionObjects(whatToProcess)
 		formData.append($('#select_broadcaster').attr('id'),$('#select_broadcaster').val());  
 		formData.append($('#speed_directory_path').attr('id'),$('#speed_directory_path').val());  
 		formData.append($('#speed_destination_file_path').attr('id'),$('#speed_destination_file_path').val());  
+		formData.append($('#select_secondary_broadcaster').attr('id'),$('#select_secondary_broadcaster').val());  
 		formData.append($('#bat_speed_source_file_path').attr('id'),$('#bat_speed_source_file_path').val());  
 		formData.append($('#bat_speed_destination_file_path').attr('id'),$('#bat_speed_destination_file_path').val());  
 		break;
