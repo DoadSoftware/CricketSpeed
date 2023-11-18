@@ -28,7 +28,6 @@ import net.sf.json.JSONObject;
 @Controller
 public class IndexController 
 {
-	
 	public BatSpeed session_bat_speed;
 	
 	@RequestMapping(value = {"/"}, method={RequestMethod.GET,RequestMethod.POST}) 
