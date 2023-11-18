@@ -53,6 +53,22 @@
 	              			value="${session_configuration.filename}"></input>
 	              	</div>
 				  </div>
+				  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+				    <label for="bat_speed_source_file_path" class="col-sm-3 col-form-label text-left">Bat Speed Source Filepath </label>
+				    <div class="col-sm-6 col-md-6">
+						<input type="text" id="bat_speed_source_file_path" name="bat_speed_source_file_path" 
+	              			maxlength="500" class="form-control form-control-sm floatlabel"
+	              			value="${session_configuration.secondaryIpAddress}"></input>
+	              	</div>
+				  </div>
+				  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
+				    <label for="bat_speed_destination_file_path" class="col-sm-3 col-form-label text-left">Bat Speed Destination Filepath </label>
+				    <div class="col-sm-6 col-md-6">
+						<input type="text" id="bat_speed_destination_file_path" name="bat_speed_destination_file_path" 
+	              			maxlength="500" class="form-control form-control-sm floatlabel"
+	              			value="${session_configuration.secondaryFilename}"></input>
+	              	</div>
+				  </div>
 				    <button style="margin-top:5px;background-color:#2E008B;color:#FEFEFE;" class="btn btn-sm" type="button"
 				  		name="initialise_form_btn" id="initialise_form_btn" onclick="processUserSelection(this)">Continue</button>				  
 			  </div>

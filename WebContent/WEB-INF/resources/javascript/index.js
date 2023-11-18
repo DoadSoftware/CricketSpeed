@@ -1,4 +1,4 @@
-var config, speed_data;
+var config, speed_data, bat_speed;
 function processWaitingButtonSpinner(whatToProcess) 
 {
 	switch (whatToProcess) {
@@ -17,6 +17,7 @@ function afterFormLoad(whatToProcess) {
 	case 'SPEED':
 		setInterval(function () {
 			processCricketProcedures('SPEED');
+			processCricketProcedures('BAT_SPEED');
 			processMatchTime();
 		}, 1000);
 		break;
@@ -54,6 +55,13 @@ function populateFormObject(whatToProcess) {
 			document.getElementById('speed_value').innerHTML = 'NO SPEED FOUND';
 		}
 		break;
+	case 'BAT_SPEED':
+		if(bat_speed_data) {
+			document.getElementById('bat_speed_value').innerHTML = 'Bat Speed: ' + bat_speed_data.batSpeed;
+		} else {
+			document.getElementById('bat_speed_value').innerHTML = 'NO BAT SPEED FOUND';
+		}
+		break;
 	}
 	
 }
@@ -67,6 +75,8 @@ function uploadFormDataToSessionObjects(whatToProcess)
 		formData.append($('#select_broadcaster').attr('id'),$('#select_broadcaster').val());  
 		formData.append($('#speed_directory_path').attr('id'),$('#speed_directory_path').val());  
 		formData.append($('#speed_destination_file_path').attr('id'),$('#speed_destination_file_path').val());  
+		formData.append($('#bat_speed_source_file_path').attr('id'),$('#bat_speed_source_file_path').val());  
+		formData.append($('#bat_speed_destination_file_path').attr('id'),$('#bat_speed_destination_file_path').val());  
 		break;
 	}
 
@@ -100,11 +110,20 @@ function uploadFormDataToSessionObjects(whatToProcess)
        	 	console.log('Error occured in uploadFormDataToSessionObjects with error description = ' + e);     
         }    
     });		
-	
 }
 function processCricketProcedures(whatToProcess)
 {
 	var value_to_process; 
+
+	switch (whatToProcess) {
+	case 'BAT_SPEED':
+		if(document.getElementById('configuration_secondary_source_path').value) {
+		} else {
+    		processWaitingButtonSpinner('END_WAIT_TIMER');
+			return false;
+		}
+		break;
+	}
 	
 	$.ajax({    
         type : 'Get',     
@@ -116,6 +135,12 @@ function processCricketProcedures(whatToProcess)
 			case 'SPEED':
 				if(data) {
 					speed_data = data;
+					populateFormObject(whatToProcess);
+				}
+				break;
+			case 'BAT_SPEED':
+				if(data) {
+					bat_speed = data;
 					populateFormObject(whatToProcess);
 				}
 				break;
