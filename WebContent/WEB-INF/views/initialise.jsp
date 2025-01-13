@@ -35,6 +35,7 @@
 				      <select id="select_broadcaster" name="select_broadcaster" class="browser-default custom-select custom-select-sm">
 				      	<option value="hawkeye">Hawkeye</option>
 				      	<option value="khelAI">Khel AI</option>
+				      	<option value="Virtual_Eye">Virtual Eye</option>
 				      </select>
 				    </div>
 				  </div>
