@@ -59,6 +59,7 @@
 				    <label for="select_secondary_broadcaster" class="col-sm-3 col-form-label text-left">Select Bat Speed Broadcaster </label>
 				    <div class="col-sm-6 col-md-6">
 				      <select id="select_secondary_broadcaster" name="select_secondary_broadcaster" class="browser-default custom-select custom-select-sm">
+				      <option value=" "></option>
 				      	<option value="spektacom">Spektacom</option>
 				      </select>
 				    </div>

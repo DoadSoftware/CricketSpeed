@@ -29,7 +29,7 @@
 			  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
 				<div class="row">
 				  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
-				    <label id="match_time_hdr" class="col-sm-3 col-form-label text-left">Clock </label>
+				   <!--  <label id="match_time_hdr" class="col-sm-3 col-form-label text-left">Clock </label> -->
 				    <label id="speed_value" class="col-sm-3 col-form-label text-left">Speed: </label>
 				    <label id="bat_speed_value" class="col-sm-3 col-form-label text-left">Bat Speed: </label>
 	              	</div>
@@ -43,6 +43,8 @@
   </div>
   <input type="hidden" id="configuration_secondary_source_path" name="configuration_secondary_source_path"
   		value="${session_configuration.secondaryFilename}"></input>
+  		<input type="hidden" id="select_secondary_broadcaster" name="select_secondary_broadcaster"
+  		value="${session_configuration.secondaryBroadcaster}"></input>
 </form:form>
 </body>
 </html>

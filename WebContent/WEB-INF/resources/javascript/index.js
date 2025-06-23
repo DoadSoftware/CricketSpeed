@@ -17,17 +17,16 @@ function afterFormLoad(whatToProcess) {
 	case 'SPEED':
 		setInterval(function () {
 			processCricketProcedures('SPEED');
+		  if($('#select_secondary_broadcaster').val() == 'spektacom')
+		  {
 			processCricketProcedures('BAT_SPEED');
-			processMatchTime();
+			}
+			/*processMatchTime();*/
 		}, 1000);
 		break;
 	}
 }
-function processMatchTime() {
-	var today = new Date();
-	document.getElementById('match_time_hdr').innerHTML = 'Clock ' 
-		+ today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-}
+
 function processUserSelection(whichInput)
 {	
 	switch ($(whichInput).attr('name')) {

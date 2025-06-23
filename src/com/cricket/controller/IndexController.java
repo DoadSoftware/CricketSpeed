@@ -100,6 +100,16 @@ public class IndexController
 			@ModelAttribute("session_speed") Speed session_speed,
 			@ModelAttribute("session_configuration") Configuration session_configuration) throws JAXBException, IOException
 	{	
+		if (session_configuration.getSecondaryBroadcaster().equalsIgnoreCase("spektacom") && whatToProcess.toUpperCase().equalsIgnoreCase("BAT_SPEED")) {
+			if(session_bat_speed == null) {
+				session_bat_speed = new BatSpeed(0);
+			}
+			session_bat_speed = CricketFunctions.processCurrentBatSpeed(session_configuration.getSecondaryIpAddress(), 
+				session_configuration.getSecondaryFilename(),session_bat_speed);
+			return JSONObject.fromObject(session_bat_speed).toString();
+		}
+		
+		
 		switch (whatToProcess.toUpperCase()) {
 		case "SPEED":
 			
@@ -111,16 +121,6 @@ public class IndexController
 					session_configuration.getPrimaryIpAddress(), session_configuration.getFilename(), session_speed);
 
 			return JSONObject.fromObject(session_speed).toString();
-
-		case "BAT_SPEED":
-
-			if(session_bat_speed == null) {
-				session_bat_speed = new BatSpeed(0);
-			}
-			session_bat_speed = CricketFunctions.processCurrentBatSpeed(session_configuration.getSecondaryIpAddress(), 
-				session_configuration.getSecondaryFilename(),session_bat_speed);
-			return JSONObject.fromObject(session_bat_speed).toString();
-			
 		default:
 			return JSONObject.fromObject(null).toString();
 		}
