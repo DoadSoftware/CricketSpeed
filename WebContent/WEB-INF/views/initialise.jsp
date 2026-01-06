@@ -34,6 +34,7 @@
 				    <div class="col-sm-6 col-md-6">
 				      <select id="select_broadcaster" name="select_broadcaster" class="browser-default custom-select custom-select-sm">
 				      	<option value="hawkeye">Hawkeye</option>
+				      	<option value="Kadamba">Kadamba</option>
 				      	<option value="khelAI">Khel AI</option>
 				      	<option value="Virtual_Eye">Virtual Eye</option>
 				      </select>
