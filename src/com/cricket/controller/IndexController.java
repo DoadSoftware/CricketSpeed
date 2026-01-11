@@ -23,11 +23,9 @@ import com.cricket.model.Setup;
 import com.cricket.model.Speed;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
-import com.cricket.util.HawkeyeCricketSpeed;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import net.sf.json.JSONObject;
 
 @SessionAttributes(value = {"session_speed", "session_configuration"})
@@ -72,7 +70,7 @@ public class IndexController
 		@ModelAttribute("session_configuration") Configuration session_configuration) 
 			throws StreamReadException, DatabindException, IOException
 	{
-		if(current_match.getMatch() != null) {
+		if(current_match.getMatch() == null) {
 			current_match.setMatch(new Match());
 			current_match.getMatch().setMatchFileName(selectedMatch);
 		}
@@ -129,7 +127,9 @@ public class IndexController
 			@ModelAttribute("session_speed") Speed session_speed,
 			@ModelAttribute("session_configuration") Configuration session_configuration) throws JAXBException, IOException
 	{	
-		if (session_configuration.getSecondaryBroadcaster().equalsIgnoreCase("spektacom") && whatToProcess.toUpperCase().equalsIgnoreCase("BAT_SPEED")) {
+		if (session_configuration.getSecondaryBroadcaster() != null 
+			&& session_configuration.getSecondaryBroadcaster().equalsIgnoreCase("spektacom") 
+			&& whatToProcess.toUpperCase().equalsIgnoreCase("BAT_SPEED")) {
 			if(session_bat_speed == null) {
 				session_bat_speed = new BatSpeed(0);
 			}
@@ -151,7 +151,7 @@ public class IndexController
 			switch(session_configuration.getBroadcaster().toUpperCase()) {
 			case CricketUtil.HAWKEYE:
 				if(current_match.getMatch() != null && current_match.getMatch().getMatchFileName() != null) {
-					HawkeyeCricketSpeed.readLatestSpeedFiles(session_configuration.getPrimaryIpAddress(), current_match.getMatch().getMatchFileName());
+					CricketFunctions.logAllHawkeyeSpeeds(session_configuration.getPrimaryIpAddress(), current_match.getMatch().getMatchFileName());
 				}
 				break;
 			}
