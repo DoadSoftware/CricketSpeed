@@ -1,9 +1,9 @@
 package com.cricket.controller;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Map.Entry;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.springframework.stereotype.Controller;
@@ -15,12 +15,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import com.cricket.model.BatSpeed;
 import com.cricket.model.Configuration;
+import com.cricket.model.Match;
+import com.cricket.model.MatchAllData;
+import com.cricket.model.Setup;
 import com.cricket.model.Speed;
 import com.cricket.util.CricketFunctions;
 import com.cricket.util.CricketUtil;
+import com.cricket.util.HawkeyeCricketSpeed;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.sf.json.JSONObject;
 
@@ -28,7 +34,9 @@ import net.sf.json.JSONObject;
 @Controller
 public class IndexController 
 {
+	public ObjectMapper objectMapper = new ObjectMapper();
 	public BatSpeed session_bat_speed;
+	public MatchAllData current_match = new MatchAllData();
 	
 	@RequestMapping(value = {"/"}, method={RequestMethod.GET,RequestMethod.POST}) 
 	public String initialisePage(ModelMap model,
@@ -43,6 +51,13 @@ public class IndexController
 			JAXBContext.newInstance(Configuration.class).createMarshaller().marshal(session_configuration, 
 				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CONFIGURATIONS_DIRECTORY + CricketUtil.SPEED_XML));
 		}
+		model.addAttribute("match_files", new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY).listFiles(new FileFilter() {
+			@Override
+		    public boolean accept(File pathname) {
+		        String name = pathname.getName().toLowerCase();
+		        return name.endsWith(".json") && pathname.isFile();
+		    }
+		}));		
 		model.addAttribute("session_speed",session_speed);
 		model.addAttribute("session_configuration",session_configuration);
 		session_speed = new Speed(0);
@@ -52,9 +67,23 @@ public class IndexController
 
 	@RequestMapping(value = {"/output"}, method={RequestMethod.GET,RequestMethod.POST}) 
 	public String outputPage(ModelMap model,
+		@RequestParam(value = "select_cricket_matches", required = false, defaultValue = "") String selectedMatch,
 		@ModelAttribute("session_speed") Speed session_speed,
-		@ModelAttribute("session_configuration") Configuration session_configuration)
+		@ModelAttribute("session_configuration") Configuration session_configuration) 
+			throws StreamReadException, DatabindException, IOException
 	{
+		if(current_match.getMatch() != null) {
+			current_match.setMatch(new Match());
+			current_match.getMatch().setMatchFileName(selectedMatch);
+		}
+		if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + selectedMatch).exists()) 
+		{
+			current_match.setSetup(objectMapper.readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + selectedMatch), Setup.class));
+		}
+		if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + selectedMatch).exists()) 
+		{
+			current_match.setMatch(objectMapper.readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + selectedMatch), Match.class));
+		}
 		model.addAttribute("session_speed",session_speed);
 		model.addAttribute("session_configuration",session_configuration);
 		return "speed";
@@ -109,7 +138,6 @@ public class IndexController
 			return JSONObject.fromObject(session_bat_speed).toString();
 		}
 		
-		
 		switch (whatToProcess.toUpperCase()) {
 		case "SPEED":
 			
@@ -118,9 +146,17 @@ public class IndexController
 			}
 
 			session_speed = CricketFunctions.saveCurrentSpeed(session_configuration.getBroadcaster().toUpperCase(), 
-					session_configuration.getPrimaryIpAddress(), session_configuration.getFilename(), session_speed);
-
+				session_configuration.getPrimaryIpAddress(), session_configuration.getFilename(), session_speed);
+			
+			switch(session_configuration.getBroadcaster().toUpperCase()) {
+			case CricketUtil.HAWKEYE:
+				if(current_match.getMatch() != null && current_match.getMatch().getMatchFileName() != null) {
+					HawkeyeCricketSpeed.readLatestSpeedFiles(session_configuration.getPrimaryIpAddress(), current_match.getMatch().getMatchFileName());
+				}
+				break;
+			}
 			return JSONObject.fromObject(session_speed).toString();
+
 		default:
 			return JSONObject.fromObject(null).toString();
 		}

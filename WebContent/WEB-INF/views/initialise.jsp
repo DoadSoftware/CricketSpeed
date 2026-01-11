@@ -40,6 +40,17 @@
 				      </select>
 				    </div>
 				  </div>
+				  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:0.8px;">
+				    <label for="select_cricket_matches" class="col-sm-4 col-form-label text-left">Select Cricket Match </label>
+				    <div class="col-sm-6 col-md-6">
+				      <select id="select_cricket_matches" name="select_cricket_matches" 
+				      		class="brower-default custom-select custom-select-sm">
+							<c:forEach items = "${match_files}" var = "match">
+					          	<option value="${match.name}">${match.name}</option>
+							</c:forEach>
+				      </select>
+				    </div>
+				  </div>				  
 				  <div class="form-group row row-bottom-margin ml-2" style="margin-bottom:5px;">
 				    <label for="speed_directory_path" class="col-sm-3 col-form-label text-left">Speed Source Directory </label>
 				    <div class="col-sm-6 col-md-6">
